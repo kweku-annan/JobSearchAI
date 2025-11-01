@@ -2,7 +2,7 @@
 """Database models design for application"""
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Text, DateTime
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -19,10 +19,11 @@ class CacheJobData(Base):
     company_name = Column(String(255), nullable=True)
     location = Column(String(255), nullable=True)
     date_posted = Column(String(100), nullable=True)
+    is_remote = Column(Boolean, default=True, nullable=False)
     fetch_timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     def __init__(self, job_title: str, job_description: str, job_url: str = None,
-                 company_name: str = None, location: str = None, date_posted: str = None):
+                 company_name: str = None, location: str = None, date_posted: str = None, is_remote: bool = True):
         """Initializes the CacheJobData instance"""
         self.job_url = job_url
         self.job_description = job_description
@@ -30,3 +31,4 @@ class CacheJobData(Base):
         self.company_name = company_name
         self.location = location
         self.date_posted = date_posted
+        self.is_remote = is_remote
