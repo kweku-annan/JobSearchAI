@@ -39,6 +39,7 @@ def parse_arbeitnow_job():
         new_job["location"] = job.get('location', None)
         new_job["job_url"] = job.get('url', None)
         new_job["tags"] = job.get('tags', [])
+        new_job["date_posted"] = job.get('created_at', None)
         parsed_jobs.append(new_job)
 
     return parsed_jobs
