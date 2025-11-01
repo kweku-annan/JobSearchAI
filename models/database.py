@@ -15,7 +15,7 @@ class CacheJobData(Base):
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     job_url = Column(String(255), nullable=True)
     job_description = Column(Text, nullable=False)
-    job_title = Column(String(255), nullable=False)
+    job_title = Column(String(255), nullable=False, index=True)
     company_name = Column(String(255), nullable=True)
     location = Column(String(255), nullable=True)
     date_posted = Column(String(100), nullable=True)
