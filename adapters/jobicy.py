@@ -16,10 +16,6 @@ def fetch_jobicy_jobs():
         print(f"Error fetching JobIcy jobs data: {e}")
         return []
 
-
-# print(type(fetch_jobicy_jobs()))
-# print(fetch_jobicy_jobs())
-
 def parse_jobicy_job():
     """Parse data from JobIcy API into standardized job format"""
     jobs = fetch_jobicy_jobs()  # Jobs is a list of job dicts

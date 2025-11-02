@@ -17,7 +17,6 @@ def fetch_arbeitnow_jobs():
         print(f"Error fetching ArbeitNow jobs data: {e}")
         return []
 
-
 def parse_arbeitnow_job():
     """Parse data from ArbeitNow API into standardized job format"""
     jobs = fetch_arbeitnow_jobs()  # Jobs is a list of job dicts
@@ -44,6 +43,3 @@ def parse_arbeitnow_job():
 
     return parsed_jobs
 
-#
-# all_jobs = parse_arbeitnow_job()
-# print(all_jobs[0])
