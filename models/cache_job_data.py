@@ -19,8 +19,8 @@ class CacheJobData(Base):
     company_name = Column(String(255), nullable=True)
     location = Column(String(255), nullable=True)
     date_posted = Column(String(100), nullable=True)
-    is_remote = Column(Boolean, default=True, nullable=False)
-    fetch_timestamp = Column(DateTime, default=datetime.now(UTC), nullable=False)
+    is_remote = Column(String, default='True', nullable=False)
+    fetch_timestamp = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False)
 
     def __init__(self, job_title: str, job_description: str, job_url: str = None,
                  company_name: str = None, location: str = None, date_posted: str = None, is_remote: bool = True):
@@ -32,3 +32,17 @@ class CacheJobData(Base):
         self.location = location
         self.date_posted = date_posted
         self.is_remote = is_remote
+
+    def to_dict(self):
+        """Converts the CacheJobData instance to a dictionary"""
+        return {
+            'id': self.id,
+            'job_url': self.job_url,
+            'job_description': self.job_description,
+            'job_title': self.job_title,
+            'company_name': self.company_name,
+            'location': self.location,
+            'date_posted': self.date_posted,
+            'is_remote': self.is_remote,
+            'fetch_timestamp': self.fetch_timestamp.isoformat()
+        }

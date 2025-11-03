@@ -20,8 +20,9 @@ def save_to_cache():
     db_storage = DBStorage()
     new_jobs = aggregate_job_listings()
     for job in new_jobs:
+        job_title = db_storage.normalize_for_storage(job.get('job_title'))
         job_entry = CacheJobData(
-            job_title=job.get('job_title'),
+            job_title=job_title,
             job_description=job.get('job_description'),
             job_url=job.get('job_url'),
             company_name=job.get('company_name'),
@@ -48,5 +49,13 @@ def caching_logic():
         if now - last_entry > timedelta(hours=24):
             db_storage.delete_all()
             save_to_cache()
+
+
+def get_cached_jobs_by_title(job_title):
+    """Retrieves cached job data by job title"""
+    db_storage = DBStorage()
+    cached_jobs = db_storage.get_by_title(job_title)
+    return cached_jobs
+
 
 

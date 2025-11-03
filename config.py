@@ -7,7 +7,7 @@ load_dotenv()
 
 class Config:
     """Base configuration class"""
-    OPENAI_API_KEY = os.getenv("OPENAI_KEY")
+    GEMINI_API_KEY = os.getenv("GEMINI_KEY")
 
     # API URLs
     ARBEITNOW_API_URL = "https://www.arbeitnow.com/api/job-board-api" # Last resort

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """Database Storage Operations using SQLite and SQLAlchemy"""
-from sqlalchemy import create_engine, Integer, func, cast
+import re
+
+from sqlalchemy import create_engine, Integer, func, cast, and_, or_
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from models.cache_job_data import Base, CacheJobData
@@ -33,7 +35,30 @@ class DBStorage:
 
     def get_by_title(self, job_title):
         """Retrieves a CacheJobData by its job title"""
-        return self.__session.query(CacheJobData).filter_by(job_title=job_title).order_by(func.random()).limit(5).all()
+        try:
+            search_terms = self._extract_search_terms(job_title)
+
+            if not search_terms:
+                return []
+            query = self.__session.query(CacheJobData)
+
+            conditions = []
+            for term in search_terms:
+                conditions.append(
+                    CacheJobData.job_title.like(f'%{term}%')
+                )
+            query = query.filter(and_(*conditions))
+            query = query.order_by(CacheJobData.fetch_timestamp.desc())
+            jobs = query.limit(5).all()
+            if jobs:
+                return jobs
+            query = query.filter(or_(*conditions))
+            query = query.order_by(CacheJobData.fetch_timestamp.desc())
+            jobs = query.limit(5).all()
+            return jobs
+        except Exception as e:
+            return []
+
 
     def delete_all(self):
         """Deletes all records from the CacheJobData table"""
@@ -54,6 +79,64 @@ class DBStorage:
         last_refreshed = self.__session.query(CacheJobData).order_by(CacheJobData.fetch_timestamp.desc()).first()
         fetch_last_timestamp = last_refreshed.fetch_timestamp if last_refreshed else None
         return fetch_last_timestamp
+
+    def _extract_search_terms(self, job_title):
+        """Extracts meaningful search terms"""
+        if not job_title:
+            return []
+        title_lower = job_title.lower().strip()
+        tech_roles = [
+            'software engineer', 'software developer',
+            'backend developer', 'backend engineer',
+            'frontend developer', 'frontend engineer',
+            'full stack', 'fullstack',
+            'data scientist', 'data analyst', 'data engineer',
+            'machine learning', 'ml engineer',
+            'devops engineer', 'devops',
+            'site reliability', 'sre',
+            'cloud engineer', 'cloud architect',
+            'security engineer', 'cybersecurity',
+            'mobile developer', 'ios developer', 'android developer',
+            'web developer', 'web designer',
+            'ui designer', 'ux designer', 'product designer',
+            'qa engineer', 'test engineer',
+            'database administrator', 'dba',
+        ]
+
+        matched_roles = []
+        for role in tech_roles:
+            if role in title_lower:
+                matched_roles.append(role)
+                title_lower = title_lower.replace(role, '').strip()
+
+        remaining_words = title_lower.split()
+
+        # Filter out very common/generic words that don't help matching
+        stop_words = {'and', 'or', 'the', 'a', 'an', 'in', 'at', 'for', 'with', 'remote', 'hybrid'}
+        meaningful_words = [w for w in remaining_words if w not in stop_words and len(w) > 1]
+
+        search_terms = matched_roles + meaningful_words
+
+        seen = set()
+        unique_terms = []
+        for term in search_terms:
+            if term not in seen:
+                seen.add(term)
+                unique_terms.append(term)
+
+        return unique_terms
+
+    def normalize_for_storage(self, text):
+        """Normalizes text for consistent storage"""
+        if not text:
+            return text
+        normalized = text.lower().strip()
+
+        # Remove special characters but keep spaces and hyphens
+        normalized = re.sub(r'[^\w\s-]', ' ', normalized)
+        normalized = re.sub(r'\s+', ' ', normalized).strip()
+        return normalized
+
 
 
 
