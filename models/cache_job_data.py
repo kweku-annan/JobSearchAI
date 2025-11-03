@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Database models design for application"""
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean
 from sqlalchemy.orm import declarative_base
@@ -20,7 +20,7 @@ class CacheJobData(Base):
     location = Column(String(255), nullable=True)
     date_posted = Column(String(100), nullable=True)
     is_remote = Column(String, default='True', nullable=False)
-    fetch_timestamp = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False)
+    fetch_timestamp = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 
     def __init__(self, job_title: str, job_description: str, job_url: str = None,
                  company_name: str = None, location: str = None, date_posted: str = None, is_remote: bool = True):

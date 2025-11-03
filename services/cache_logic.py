@@ -9,7 +9,7 @@
     5. If not stale, return the cached data by the value demanded
 """
 
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta, timezone
 
 from adapters.adapter_logic import aggregate_job_listings
 from schemas.dbStorage import DBStorage
@@ -36,7 +36,7 @@ def save_to_cache():
 def caching_logic():
     """Logic to manage caching of job data"""
     db_storage = DBStorage()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
 
     # Check if there is any data in the cache
     if not db_storage.check_for_data():
