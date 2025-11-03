@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 """LLM Agent Service to handle interactions with the language model"""
+import textwrap
+
 import google.generativeai as genai
 from config import Config
-import os
 import json
 from typing import Dict, List, Optional
 
@@ -28,7 +29,7 @@ def build_prompt(job_data: Dict) -> str:
     description = job_data.get("job_description", "")
     if len(description) > 1000:
         description = description[:1000] + "..."
-    prompt = f"""
+    prompt = textwrap.dedent( f"""
         You are an expert career advisor helping job seekers create portfolio projects that align them as top candidates for job roles.
         Analyze this job and recommend 3 top portfolio projects that would impress hiring managers for this role.
         Job Title: {job_data.get("job_title", "N/A")}
@@ -44,7 +45,7 @@ def build_prompt(job_data: Dict) -> str:
         {{
         "projects": [
         {{
-        "title": "Specific Project Name,
+        "title": "Specific Project Name",
         "description": "What to build in 2 - 3 sentences.",
         "technologies": ["Tech1", "Tech2", "..."],
         "demonstrates": "Which job skills this prove",
@@ -53,7 +54,7 @@ def build_prompt(job_data: Dict) -> str:
       ]
       }}
     Generate exactly 3 projects. Return only JSON, nothing else.      
-"""
+""")
     return prompt
 
 def parse_response(response_text: str) -> Optional[List[Dict]]:

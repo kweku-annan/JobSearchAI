@@ -10,7 +10,7 @@ def html_to_text(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup.get_text().strip()
 
-def format_job_response(jobs: List[Dict], recommendations: Optional[List[Dict]], job_title:str) -> str:
+def format_job_response(jobs: Dict, recommendations: Optional[List[Dict]], job_title:str) -> str:
     """
     Format jobs and recommendations into a nice message
 
@@ -28,7 +28,7 @@ def format_job_response(jobs: List[Dict], recommendations: Optional[List[Dict]],
 
     # Add recommendations if available
     if recommendations:
-        first_job = jobs[0]
+        first_job = jobs
         message += f"Portfolio Project Recommendations\n"
         message += f"_(Based on: {first_job['job_title']} at {first_job['company_name']})_\n\n"
 
@@ -40,20 +40,20 @@ def format_job_response(jobs: List[Dict], recommendations: Optional[List[Dict]],
             message += f"   • Time: {rec['timeline']}\n\n"
 
     else:
-        message += "No portfolio project recommendations available at this time. But here are the positions:\n\n"
+        message += "No portfolio project recommendations available at this time. Try something else\n\n"
 
-        # Add all jobs
-        message += "📋 **Available Positions:**\n\n"
-
-        for i, job in enumerate(jobs, 1):
-            message += f"{i}. **{job['job_title']}** @ {job['company_name']}\n"
-            desc = job['description'][:150] + "..." if len(job['description']) > 150 else job['description']
-            message += f"{desc}\n"
-
-            if job['url']:
-                message += f"   🔗 [Apply Here]({job['url']})\n"
-
-            message += "\n"
+        # # Add all jobs
+        # message += "📋 **Available Positions:**\n\n"
+        #
+        # for i, job in enumerate(jobs, 1):
+        #     message += f"{i}. **{job['job_title']}** @ {job['company_name']}\n"
+        #     desc = job['description'][:150] + "..." if len(job['description']) > 150 else job['description']
+        #     message += f"{desc}\n"
+        #
+        #     if job['url']:
+        #         message += f"   🔗 [Apply Here]({job['url']})\n"
+        #
+        #     message += "\n"
 
     return message
 

@@ -14,14 +14,14 @@ def aggregate_job_listings():
     all_jobs = []
     try:
         remotive = parse_remotive_job()
-        remoteok = parse_remoteok_job()
         all_jobs.extend(remotive)
-        all_jobs.extend(remoteok)
     except Exception as e:
         # print(f"Error fetching from primary adapters: {e}")
         try:
-            jobicy = parse_jobicy_job()
-            all_jobs.extend(jobicy)
+            remoteok = parse_remoteok_job()
+            all_jobs.extend(remoteok)
+            # jobicy = parse_jobicy_job()
+            # all_jobs.extend(jobicy)
         except Exception as e:
             # print(f"Error fetching from JobIcy adapter: {e}")
             try:

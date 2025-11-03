@@ -36,7 +36,7 @@ def save_to_cache():
 def caching_logic():
     """Logic to manage caching of job data"""
     db_storage = DBStorage()
-    now = datetime.now(timezone.utc)
+    now = datetime.now()
 
     # Check if there is any data in the cache
     if not db_storage.check_for_data():

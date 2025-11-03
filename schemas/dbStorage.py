@@ -49,12 +49,12 @@ class DBStorage:
                 )
             query = query.filter(and_(*conditions))
             query = query.order_by(CacheJobData.fetch_timestamp.desc())
-            jobs = query.limit(5).all()
+            jobs = query.first()
             if jobs:
                 return jobs
             query = query.filter(or_(*conditions))
             query = query.order_by(CacheJobData.fetch_timestamp.desc())
-            jobs = query.limit(5).all()
+            jobs = query.first()
             return jobs
         except Exception as e:
             return []

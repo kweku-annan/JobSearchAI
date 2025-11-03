@@ -40,8 +40,8 @@ def handle_job_search(message: str) -> str:
     # Generate recommendations based on the first job
     recommendations = None
     try:
-        cached_jobs = [jobs.to_dict() for jobs in cached_jobs]
-        recommendations = generate_recommendations(cached_jobs[0])
+        cached_jobs = cached_jobs.to_dict()
+        recommendations = generate_recommendations(cached_jobs)
     except Exception as e:
         print(f"LLM recommendation error: {e}")
 
