@@ -16,6 +16,6 @@ def jobsearchai():
     response_message = process_message(message)
     return jsonify(response_message), 200
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
+#
+# if __name__ == "__main__":
+#     app.run(debug=True)
