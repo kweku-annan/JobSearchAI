@@ -30,7 +30,7 @@ def format_job_response(jobs: Dict, recommendations: Optional[List[Dict]], job_t
     if recommendations:
         first_job = jobs
         message += f"Portfolio Project Recommendations\n"
-        message += f"_(Based on: {first_job['job_title']} at {first_job['company_name']})_\n\n"
+        message += f"Based on: {first_job['job_title']} at {first_job['company_name']}\n"
 
         for i, rec in enumerate(recommendations, 1):
             message += f"{i}.  {rec['title']}\n"
@@ -40,20 +40,20 @@ def format_job_response(jobs: Dict, recommendations: Optional[List[Dict]], job_t
             message += f"   • Time: {rec['timeline']}\n\n"
 
     else:
-        message += "No portfolio project recommendations available at this time. Try something else\n\n"
+        message += "No portfolio project recommendations available at this time. Try something else\n"
 
-        # # Add all jobs
-        # message += "📋 **Available Positions:**\n\n"
-        #
-        # for i, job in enumerate(jobs, 1):
-        #     message += f"{i}. **{job['job_title']}** @ {job['company_name']}\n"
-        #     desc = job['description'][:150] + "..." if len(job['description']) > 150 else job['description']
-        #     message += f"{desc}\n"
-        #
-        #     if job['url']:
-        #         message += f"   🔗 [Apply Here]({job['url']})\n"
-        #
-        #     message += "\n"
+        # Add all jobs
+        message += "📋 **Available Positions:**\n\n"
+
+        for i, job in enumerate(jobs, 1):
+            message += f"{i}. **{job['job_title']}** @ {job['company_name']}\n"
+            desc = job['description'][:150] + "..." if len(job['description']) > 150 else job['description']
+            message += f"{desc}\n"
+
+            if job['url']:
+                message += f"   🔗 [Apply Here]({job['url']})\n"
+
+            message += "\n"
 
     return message
 
@@ -61,6 +61,6 @@ def format_job_response(jobs: Dict, recommendations: Optional[List[Dict]], job_t
 def format_no_jobs_message(job_title: str) -> str:
     """Message when no jobs found in the database"""
     return f"""No cached jobs found for "{job_title}". Please try again later or "Try something like:\n"
-            "• 'python developer'\n"
-            "• 'looking for backend engineer jobs'\n"
-            "• 'show me data analyst positions'\n\n."""
+            "--'python developer'\n"
+            "--'looking for backend engineer jobs'\n"
+            "--'show me data analyst positions'\n\n."""
