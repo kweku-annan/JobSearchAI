@@ -79,7 +79,7 @@ def jobsearchai():
 
             # Extract message from Telex format
             user_message = extract_message_from_telex(request_data)
-            messageId = request_data.get("params", {}).get("messageId", "")
+            messageId = request_data.get("params", {}).get("message", {}).get("messageId", "")
 
 
             # Fallback to query params
@@ -92,7 +92,7 @@ def jobsearchai():
                 return jsonify({
                     "jsonrpc": "2.0",
                     "result": {
-                        "role": "assistant",
+                        "role": "agent",
                         "parts": [
                             {
                                 "kind": "text",
@@ -114,7 +114,7 @@ def jobsearchai():
             return jsonify({
                 "jsonrpc": "2.0",
                 "result": {
-                    "role": "assistant",
+                    "role": "agent",
                     "parts": [
                         {
                             "kind": "text",
@@ -130,12 +130,12 @@ def jobsearchai():
         import traceback
         traceback.print_exc()
         request_data = request.get_json(silent=True) or {}
-        messageId = request_data.get("params", {}).get("messageId", "")
+        messageId = request_data.get("params", {}).get("message", {}).get("messageId", "")
 
         return jsonify({
             "jsonrpc": "2.0",
             "result": {
-                "role": "assistant",
+                "role": "agent",
                 "parts": [
                     {
                         "kind": "text",
