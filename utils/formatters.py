@@ -60,4 +60,7 @@ def format_job_response(jobs: Dict, recommendations: Optional[List[Dict]], job_t
 
 def format_no_jobs_message(job_title: str) -> str:
     """Message when no jobs found in the database"""
-    return f"""No cached jobs found for "{job_title}". Please try again later or adjust your search criteria."""
+    return f"""No cached jobs found for "{job_title}". Please try again later or "Try something like:\n"
+            "• 'python developer'\n"
+            "• 'looking for backend engineer jobs'\n"
+            "• 'show me data analyst positions'\n\n."""
