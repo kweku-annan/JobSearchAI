@@ -79,6 +79,8 @@ def jobsearchai():
 
             # Extract message from Telex format
             user_message = extract_message_from_telex(request_data)
+            messageId = request_data.get("params", {}).get("messageId", "")
+
 
             # Fallback to query params
             if not user_message:
@@ -90,21 +92,21 @@ def jobsearchai():
                 return jsonify({
                     "jsonrpc": "2.0",
                     "result": {
-                        "message": {
-                            "role": "assistant",
-                            "parts": [
-                                {
-                                    "kind": "text",
-                                    "text": "👋 Hi! I'm JobInsightAI. Tell me what job you're looking for and I'll find listings + recommend portfolio projects!\n\nExample: 'python developer' or 'backend engineer'"
-                                }
+                        "role": "assistant",
+                        "parts": [
+                            {
+                                "kind": "text",
+                                "text": "👋 Hi! I'm JobInsightAI. Tell me what job you're looking for and I'll find listings + recommend portfolio projects!\n\nExample: 'python developer' or 'backend engineer'"
+                            }
 
-                            ]
-                        }
+                        ],
+                        "messageId": messageId
                     }
                 }), 200
 
             # Process the message
             response_text = process_message(user_message)
+
 
             print(f"Generated response (first 100 chars): {response_text[:100]}...")
 
@@ -112,15 +114,14 @@ def jobsearchai():
             return jsonify({
                 "jsonrpc": "2.0",
                 "result": {
-                    "message": {
-                        "role": "assistant",
-                        "parts": [
-                            {
-                                "kind": "text",
-                                "text": response_text
-                            }
-                        ]
-                    }
+                    "role": "assistant",
+                    "parts": [
+                        {
+                            "kind": "text",
+                            "text": response_text
+                        }
+                    ],
+                    "messageId": messageId
                 }
             }), 200
 
@@ -128,19 +129,20 @@ def jobsearchai():
         print(f"Error in jobsearchai endpoint: {e}")
         import traceback
         traceback.print_exc()
+        request_data = request.get_json(silent=True) or {}
+        messageId = request_data.get("params", {}).get("messageId", "")
 
         return jsonify({
             "jsonrpc": "2.0",
             "result": {
-                "message": {
-                    "role": "assistant",
-                    "parts": [
-                        {
-                            "kind": "text",
-                            "text": "Sorry, something went wrong. Please try again."
-                        }
-                    ]
-                }
+                "role": "assistant",
+                "parts": [
+                    {
+                        "kind": "text",
+                        "text": "Sorry, something went wrong. Please try again."
+                    }
+                ],
+                "messageId": messageId
             }
         }), 200
 
