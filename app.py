@@ -11,7 +11,7 @@ def extract_message_from_telex(request_data):
     """
     Extract the actual user message from Telex's JSON-RPC format.
     :param request_data: JSON-RPC from Telex
-    :return:
+    :return: An extracted message string or None if not found
     """
     try:
         # First; try direct message field (backwards compactibility)
@@ -42,7 +42,7 @@ def extract_message_from_telex(request_data):
         print(f"Error extracting message: {e}")
         return None
 
-app.route('/health', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
     message = request.args.get('message', '')
@@ -79,6 +79,7 @@ def jobsearchai():
 
             # Extract message from Telex format
             user_message = extract_message_from_telex(request_data)
+            # print(f"Telex message: {user_message}")
             messageId = request_data.get("params", {}).get("message", {}).get("messageId", "")
 
 

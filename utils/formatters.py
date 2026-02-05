@@ -44,7 +44,7 @@ def format_job_response(jobs: Dict, recommendations: Optional[List[Dict]], job_t
         #
         # for i, job in enumerate(jobs, 1):
         #     message += f"{i}. **{job['job_title']}** @ {job['company_name']}\n"
-        #     desc = job['description'][:150] + "..." if len(job['description']) > 150 else job['description']
+        #     desc = job['description'][:150] + "... " if len(job['description']) > 150 else job['description']
         #     message += f"{desc}\n"
         #     if job['url']:
         #         message += f" [Apply Here]({job['url']})\n"

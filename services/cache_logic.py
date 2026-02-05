@@ -41,10 +41,12 @@ def caching_logic():
     # Check if there is any data in the cache
     if not db_storage.check_for_data():
         # Fetch data from external APIs and store in cache
+        print("No cache data found. Fetching new data...")
         save_to_cache()
     # There is data, check if it's stale
     else:
         # Get the timestamp of the most recent cache entry
+        print("Cache data found. Checking freshness...")
         last_entry = db_storage.fetch_last_refreshed()
         if now - last_entry > timedelta(hours=24):
             db_storage.delete_all()

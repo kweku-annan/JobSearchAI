@@ -1,0 +1,45 @@
+1. Refine the job_title extraction logic to handle edge cases.
+       a. Add more test cases for unusual job titles.
+       b. Research if it's best to use regex or a dedicated library for parsing job titles.
+       c. Research if it's use AI to extract job titles more accurately.
+
+2. Improve the performance of the data processing pipeline.
+       a. Profile the current implementation to identify bottlenecks.
+       b. Explore parallel processing or batching techniques.
+       c. Optimize database queries if applicable.
+
+3. Enhance error handling and logging mechanisms.
+       a. Learn about Logging and apply the knowledge here
+       b. Implement structured logging for better traceability.
+
+4. Improve AI prompts for better accuracy.
+       a. Experiment with different prompt structures.
+       b. Analyze the responses to identify patterns of inaccuracies.
+       c. Research best practices for prompt engineering.
+       d. Prompts should ask AI for projects that helps users to demonstrate not only their coding skills but also
+           their software engineering skills such as system design, testing, and documentation. Priority should be
+           given to skills that are currently in high demand in the job market.
+
+5. Implement runners that will update database with current jobs every day.
+         a. Research scheduling libraries or tools that can automate this process.
+         b. Ensure that the runner handles failures gracefully and can resume from the last successful state.
+         c. Runners should scrape the internet or access APIs to get the most recent job postings.
+         d. Runners should have a list of common and popular job titles to look for when updating the database.
+         e. Create a database of jobs that users search so that when a user searches for a job, and it is not found in
+             the database, the runner will pick it up and search on the job boards. (A self-improving DB)
+
+6. Create a user interface for this project.
+
+7. Merge Indeed's database with this database
+
+8. Database Optimization
+         a. Analyze the current database schema for potential improvements.
+         b. Implement indexing strategies to speed up query performance.
+         c. Consider data partitioning or sharding if the dataset is large.
+         d. PRIORITY: Optimize the database query to ensure  that edge cases like "Software Engineer II" or "Senior Developer" and
+            " Software Engineer" and "Software Engineering" are accurately matched and retrieved.
+
+9. Optimize the whole app so that users can input a job description and title and get the most relevant projects that match their skills and interests.
+         a. Implement a recommendation algorithm that considers user preferences and past interactions.
+         b. Use machine learning techniques to improve the relevance of project suggestions over time.
+         c. Ensure that the app is responsive and provides a seamless user experience across different devices.

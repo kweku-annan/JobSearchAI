@@ -22,6 +22,7 @@ def handle_job_search(message: str) -> str:
 
     # Extract job title from user message
     job_title = extract_job_title(message)
+    print(f"Extracted job title from user message: {job_title}")
     if not job_title:
         return (
             "🤔 I couldn't identify a job title from your message.\n\n"
