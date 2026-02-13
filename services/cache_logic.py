@@ -57,6 +57,7 @@ def get_cached_jobs_by_title(job_title):
     """Retrieves cached job data by job title"""
     db_storage = DBStorage()
     cached_jobs = db_storage.get_by_title(job_title)
+    print(f"Found {len(cached_jobs)} cached jobs for title: {job_title}")
     return cached_jobs
 
 

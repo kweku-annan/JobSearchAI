@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Agent Handler"""
+from pprint import pprint
 from agent.llm_agent_service import generate_recommendations
 # In agent/handler.py
 from utils.intent_detector import extract_job_title
@@ -34,6 +35,8 @@ def handle_job_search(message: str) -> str:
 
     caching_logic() # Ensure cache is populated and fresh
     cached_jobs = get_cached_jobs_by_title(job_title)
+    # print("==============CACHED JOBS==================")
+    # pprint(cached_jobs)
 
     if not cached_jobs:
         return format_no_jobs_message(job_title)
@@ -42,13 +45,17 @@ def handle_job_search(message: str) -> str:
     recommendations = None
     try:
         cached_jobs = cached_jobs.to_dict()
-        recommendations = generate_recommendations(cached_jobs)
+        print("==============CACHED JOBS==================")
+        pprint(cached_jobs)
+        print("==============NUMBER OF CACHED JOBS==================")
+        print(len(cached_jobs))
+        # recommendations = generate_recommendations(cached_jobs)
     except Exception as e:
         print(f"LLM recommendation error: {e}")
 
     # Format and return the job response
-    response = format_job_response(cached_jobs, recommendations, job_title)
-    return response
+    # response = format_job_response(cached_jobs, recommendations, job_title)
+    return cached_jobs
 
 
 

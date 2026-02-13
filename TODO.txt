@@ -43,3 +43,8 @@
          a. Implement a recommendation algorithm that considers user preferences and past interactions.
          b. Use machine learning techniques to improve the relevance of project suggestions over time.
          c. Ensure that the app is responsive and provides a seamless user experience across different devices.
+
+10. JOBS
+         a. PRIORITY: Ensure that link to job postings is returned together with the response.
+         b. When data is stalled, new jobs should be appended to the database and old jobs should be removed only when it
+           is passed the threshold of 7 days.

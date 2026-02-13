@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Parse texts"""
-
+from pprint import pprint
 from bs4 import BeautifulSoup
 from typing import Optional, List, Dict
 
@@ -24,6 +24,8 @@ def format_job_response(jobs: Dict, recommendations: Optional[List[Dict]], job_t
         return format_no_jobs_message(job_title)
 
     # Start building the message
+    # print("==================JOBS FOUND==================")
+    # pprint(jobs)
     message = f"Found {len(jobs)} {job_title} position{'s' if len(jobs) > 1 else ''}!:\n\n"
 
     # Add recommendations if available
