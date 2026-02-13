@@ -34,28 +34,24 @@ def handle_job_search(message: str) -> str:
         )
 
     caching_logic() # Ensure cache is populated and fresh
-    cached_jobs = get_cached_jobs_by_title(job_title)
-    # print("==============CACHED JOBS==================")
-    # pprint(cached_jobs)
+    cached_jobs = get_cached_jobs_by_title(job_title) # Could have called Db.get_by_title here
 
     if not cached_jobs:
         return format_no_jobs_message(job_title)
 
+
     # Generate recommendations based on the first job
     recommendations = None
     try:
-        cached_jobs = cached_jobs.to_dict()
-        print("==============CACHED JOBS==================")
-        pprint(cached_jobs)
-        print("==============NUMBER OF CACHED JOBS==================")
-        print(len(cached_jobs))
-        # recommendations = generate_recommendations(cached_jobs)
+        first_cached_job = cached_jobs[0].to_dict()
+        # jobs_formatter_test = format_job_response(cached_jobs, recommendations, job_title)
+        recommendations = generate_recommendations(first_cached_job)
     except Exception as e:
         print(f"LLM recommendation error: {e}")
 
     # Format and return the job response
-    # response = format_job_response(cached_jobs, recommendations, job_title)
-    return cached_jobs
+    response = format_job_response(cached_jobs, recommendations, job_title)
+    return response
 
 
 
