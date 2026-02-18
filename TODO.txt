@@ -48,3 +48,17 @@
          a. PRIORITY: Ensure that link to job postings is returned together with the response.
          b. When data is stalled, new jobs should be appended to the database and old jobs should be removed only when it
            is passed the threshold of 7 days.
+
+11. Prompts and AI
+        a. FUTURE: Refine the AI prompts to ensure that the projects suggested are not only relevant to the user's skills but also
+           align with their career goals and interests. This may involve asking users for more specific information about their
+           preferences and aspirations.
+        b. PRIORITY: Currently, the AI prompts asks the LLM to suggest projects relevant to current job market trends and demands
+           in terms of skills and technologies needed. However, the LLM does not have access to real-time data on job market trends.
+           To address this, we can implement a mechanism to regularly update the AI's knowledge base with the latest job market information.
+           This could involve:
+                a. Scraping job boards, analyzing job postings, and feeding this data into the AI model to ensure that the project suggestions are
+                based on the most current trends and demands in the job market. (This needs a deeper thought)
+                b. Enhance the LLM with tools that can access real-time data, such as web scraping tools or APIs that provide up-to-date information on job market trends.
+                This way, the LLM can generate project suggestions that are more relevant to the current job market demands.
+                (This also needs a deeper thought)
