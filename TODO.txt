@@ -1,7 +1,8 @@
 1. Refine the job_title extraction logic to handle edge cases.
-       a. Add more test cases for unusual job titles.
-       b. Research if it's best to use regex or a dedicated library for parsing job titles.
-       c. Research if it's use AI to extract job titles more accurately.
+       a. Add more test cases for unusual job titles. (✔✔✔ DONE)
+       b. Research if it's best to use regex or a dedicated library for parsing job titles. (✔✔✔ DONE)
+       c. Research if it's use AI to extract job titles more accurately. (✔✔✔ DONE)
+       d. Implement the chosen solution and test it against a variety of job titles to ensure accuracy (Both was implemented)
 
 2. Improve the performance of the data processing pipeline.
        a. Profile the current implementation to identify bottlenecks.

@@ -33,7 +33,7 @@ def generate_recommendations(job_data: Dict) -> Optional[List[Dict]]:
                 {"role": "user", "content": prompt}
             ],
             temperature=0.7,
-            response_format={"type": "json_object"}
+            # response_format={"type": "json_object"}
         )
         recommendations = parse_response(response.choices[0].message.content)
         # pprint(recommendations)
