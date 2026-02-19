@@ -14,7 +14,6 @@ class Prompts:
         if len(job_description) > 5000:
             job_description = job_description[:5000] + "..."
         prompt = textwrap.dedent(f"""
-        You are an expert career advisor helping job seekers create portfolio projects that align them as top candidates for job roles.
         Analyze this job and recommend 3 top portfolio projects that would impress hiring managers for this role.
         Job Title: {job_data.get("job_title", "N/A")}
         Company: {job_data.get("company_name", "N/A")}

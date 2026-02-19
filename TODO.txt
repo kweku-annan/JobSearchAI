@@ -1,7 +1,8 @@
 1. Refine the job_title extraction logic to handle edge cases.
-       a. Add more test cases for unusual job titles.
-       b. Research if it's best to use regex or a dedicated library for parsing job titles.
-       c. Research if it's use AI to extract job titles more accurately.
+       a. Add more test cases for unusual job titles. (✔✔✔ DONE)
+       b. Research if it's best to use regex or a dedicated library for parsing job titles. (✔✔✔ DONE)
+       c. Research if it's use AI to extract job titles more accurately. (✔✔✔ DONE)
+       d. Implement the chosen solution and test it against a variety of job titles to ensure accuracy (Both was implemented)
 
 2. Improve the performance of the data processing pipeline.
        a. Profile the current implementation to identify bottlenecks.
@@ -62,3 +63,8 @@
                 b. Enhance the LLM with tools that can access real-time data, such as web scraping tools or APIs that provide up-to-date information on job market trends.
                 This way, the LLM can generate project suggestions that are more relevant to the current job market demands.
                 (This also needs a deeper thought)
+        c. Use LLM to determine whether a user prompt/request is asking for recommendations or other stuff. Then route the request to the appropriate handler.
+           For example, if a user is asking for project recommendations, route the request to the recommendation engine. If a user is asking for information about a specific job title,
+           route the request to a different handler that can provide detailed information about that job title.
+           This will help ensure that users receive accurate and relevant responses based on their specific needs and queries. (This also needs a deeper thought)
+        d. Try with different models and judge AI responses to know which one provides the best portfolio recommendations.

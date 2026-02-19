@@ -82,7 +82,7 @@ Format Response → Return to Telex → Display to User
 ### Key Components
 - **Agent Handler**: Processes incoming messages and routes requests
 - **Job Service**: Manages job data fetching and caching
-- **LLM Service**: Interfaces with Google Gemini for AI recommendations
+- **LLM Service**: Interfaces with OpenAI for AI recommendations
 - **Adapters**: Abstraction layer for multiple job APIs
 - **Formatters**: Creates user-friendly response messages
 
@@ -90,7 +90,7 @@ Format Response → Return to Telex → Display to User
 
 Required environment variables for the application:
 ```
-GEMINI_API_KEY=your_google_gemini_api_key
+OPENAI_API_KEY=your_openai_api_key
 PORT=5000
 ```
 
@@ -405,7 +405,7 @@ This project is open source and available for educational purposes.
 
 - **HNG Internship** for the opportunity and challenge
 - **Telex.im** for the A2A protocol and platform
-- **Google** for Gemini API access
+- **OpenAI** for GPT-4o-mini API access
 - **Railway** for free deployment hosting
 - Job API providers (Arbeitnow, Findwork.dev)
 
