@@ -67,3 +67,4 @@
            For example, if a user is asking for project recommendations, route the request to the recommendation engine. If a user is asking for information about a specific job title,
            route the request to a different handler that can provide detailed information about that job title.
            This will help ensure that users receive accurate and relevant responses based on their specific needs and queries. (This also needs a deeper thought)
+        d. Try with different models and judge AI responses to know which one provides the best portfolio recommendations.
