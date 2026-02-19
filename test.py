@@ -5,10 +5,9 @@ load_dotenv()
 
 
 test_job = {
-    'position_title': 'Backend Engineer',
-    'company': 'TechCorp',
-    'skills': 'Python, FastAPI, PostgreSQL, Docker',
-    'description': 'We need a backend engineer to build APIs and manage databases.'
+    'job_title': 'Backend Engineer',
+    'company_name': 'TechCorp',
+    'job_description': 'We need a backend engineer to build APIs and manage databases. Required skills: Python, FastAPI, PostgreSQL, Docker, RESTful API design, database optimization, containerization, and cloud deployment.'
 }
 
 recommendations = generate_recommendations(test_job)

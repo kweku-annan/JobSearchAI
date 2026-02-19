@@ -2,21 +2,40 @@
 """LLM Agent Service to handle interactions with the language model"""
 from utils.prompts import Prompts
 from pprint import pprint
-import google.generativeai as genai
+from openai import OpenAI
 from config import Config
 import json
 from typing import Dict, List, Optional
 
-# Configure the Gemini API key
-genai.configure(api_key=Config.GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-2.5-flash")
+# OpenAI client will be initialized when needed
+_client = None
+
+def get_client():
+    """Get or initialize the OpenAI client"""
+    global _client
+    if _client is None:
+        _client = OpenAI(
+            api_key=Config.OPENAI_API_KEY,
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+
+        )
+    return _client
 
 def generate_recommendations(job_data: Dict) -> Optional[List[Dict]]:
-    """Generate portfolio project recommendations based on job data using Gemini LLM"""
+    """Generate portfolio project recommendations based on job data using OpenAI LLM"""
     try:
+        client = get_client()
         prompt = Prompts.generate_recommendation_prompt(job_data)
-        response = model.generate_content(prompt)
-        recommendations = parse_response(response.text)
+        response = client.responses.create(
+            model="gemini-2.5-flash",
+            input=[
+                {"role": "system", "content": "You are an expert career advisor helping job seekers create portfolio projects that align them as top candidates for job roles."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            response_format={"type": "json_object"}
+        )
+        recommendations = parse_response(response.choices[0].message.content)
         # pprint(recommendations)
         return recommendations
     except Exception as e:
@@ -24,7 +43,7 @@ def generate_recommendations(job_data: Dict) -> Optional[List[Dict]]:
         return None
 
 def parse_response(response_text: str) -> Optional[List[Dict]]:
-    """Parse Gemini response to structure data"""
+    """Parse OpenAI response to structure data"""
     try:
         # Remove markdown code block if present
         response_text = response_text.strip()

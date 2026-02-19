@@ -62,3 +62,7 @@
                 b. Enhance the LLM with tools that can access real-time data, such as web scraping tools or APIs that provide up-to-date information on job market trends.
                 This way, the LLM can generate project suggestions that are more relevant to the current job market demands.
                 (This also needs a deeper thought)
+        c. Use LLM to determine whether a user prompt/request is asking for recommendations or other stuff. Then route the request to the appropriate handler.
+           For example, if a user is asking for project recommendations, route the request to the recommendation engine. If a user is asking for information about a specific job title,
+           route the request to a different handler that can provide detailed information about that job title.
+           This will help ensure that users receive accurate and relevant responses based on their specific needs and queries. (This also needs a deeper thought)
