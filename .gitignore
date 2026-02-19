@@ -5,3 +5,4 @@ __pycache__/
 *.db
 .idea
 test.py
+MIGRATION_SUMMARY.md
