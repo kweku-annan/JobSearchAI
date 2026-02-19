@@ -46,3 +46,18 @@ class Prompts:
     Ensure the JSON is complete and properly formatted.
 """)
         return prompt
+
+    def extract_title_prompt(user_input: str):
+        """Prompt template for extracting job title from user input using LLM"""
+        prompt = textwrap.dedent(f"""
+        Extract a clean job title from this user input: "{user_input}"
+        Focus on identifying the core job title either said explicitly or implied, ignoring extraneous words.
+        Return ONLY a JSON object in this exact format (no markdown, no extra text):
+        {{
+        "status": "True" or "False" (depending on whether a valid title was found),
+        "job_title": "Extracted job title or None if no job title found"
+        
+        }}
+        
+        """)
+        return prompt

@@ -6,6 +6,7 @@ from agent.llm_agent_service import generate_recommendations
 from utils.intent_detector import extract_job_title
 from services.cache_logic import get_cached_jobs_by_title, caching_logic
 from utils.formatters import format_job_response, format_no_jobs_message
+from agent.llm_agent_service import extract_title_with_llm
 
 
 def process_message(user_message):
@@ -23,6 +24,19 @@ def handle_job_search(message: str) -> str:
 
     # Extract job title from user message
     job_title = extract_job_title(message)
+
+    # Extract using LLM if regex fails.
+    if not job_title or len(job_title.split()) > 3:  # If title is too long or not confidently extracted, try LLM
+        llm_response = extract_title_with_llm(message)
+        print(f"LLM response for title extraction: {llm_response}")
+        print(f"LLM response type: {type(llm_response)}")
+        if llm_response and isinstance(llm_response, dict) and llm_response.get("status") == "True":
+            job_title = llm_response.get("job_title")
+            print(f"LLM extracted job title: {job_title}")
+        else:
+            job_title = None
+
+
     print(f"Extracted job title from user message: {job_title}")
     if not job_title:
         return (
@@ -50,7 +64,8 @@ def handle_job_search(message: str) -> str:
         print(f"LLM recommendation error: {e}")
 
     # Format and return the job response
-    response = format_job_response(cached_jobs, recommendations, job_title)
+    # response = format_job_response(cached_jobs, recommendations, job_title)
+    response = job_title
     return response
 
 

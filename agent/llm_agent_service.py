@@ -42,6 +42,30 @@ def generate_recommendations(job_data: Dict) -> Optional[List[Dict]]:
         print(f"Error generating recommendations: {e}")
         return None
 
+
+def extract_title_with_llm(user_input: str):
+    """Use LLM to extract job title from user input"""
+    try:
+        client = get_client()
+        prompt = Prompts.extract_title_prompt(user_input)
+        response = client.chat.completions.create(
+            model="gemini-2.5-flash",
+            messages=[
+                {"role": "system", "content": "You are an expert at extracting job titles from user messages."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.0,
+            response_format={"type": "json_object"}
+        )
+        extracted_title = parse_response(response.choices[0].message.content.strip())
+        print(f"LLM extracted title response type: {type(extracted_title)}")
+        return extracted_title
+    except Exception as e:
+        print(f"Error extracting title with LLM: {e}")
+        return None
+
+
+
 def parse_response(response_text: str) -> Optional[List[Dict]]:
     """Parse OpenAI response to structure data"""
     try:
