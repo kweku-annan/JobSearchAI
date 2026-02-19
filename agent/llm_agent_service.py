@@ -26,14 +26,14 @@ def generate_recommendations(job_data: Dict) -> Optional[List[Dict]]:
     try:
         client = get_client()
         prompt = Prompts.generate_recommendation_prompt(job_data)
-        response = client.responses.create(
+        response = client.chat.completions.create(
             model="gemini-2.5-flash",
-            input=[
+            messages=[
                 {"role": "system", "content": "You are an expert career advisor helping job seekers create portfolio projects that align them as top candidates for job roles."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.7,
-            # response_format={"type": "json_object"}
+            response_format={"type": "json_object"}
         )
         recommendations = parse_response(response.choices[0].message.content)
         # pprint(recommendations)
