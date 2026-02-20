@@ -16,7 +16,7 @@ def get_client():
     if _client is None:
         _client = OpenAI(
             api_key=Config.OPENAI_API_KEY,
-            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+            base_url="https://openrouter.ai/api/v1"
 
         )
     return _client
@@ -27,7 +27,7 @@ def generate_recommendations(job_data: Dict) -> Optional[List[Dict]]:
         client = get_client()
         prompt = Prompts.generate_recommendation_prompt(job_data)
         response = client.chat.completions.create(
-            model="gemini-2.5-flash",
+            model="openai/gpt-oss-120b",
             messages=[
                 {"role": "system", "content": "You are an expert career advisor helping job seekers create portfolio projects that align them as top candidates for job roles."},
                 {"role": "user", "content": prompt}
@@ -49,7 +49,7 @@ def extract_title_with_llm(user_input: str):
         client = get_client()
         prompt = Prompts.extract_title_prompt(user_input)
         response = client.chat.completions.create(
-            model="gemini-2.5-flash",
+            model="openai/gpt-oss-120b",
             messages=[
                 {"role": "system", "content": "You are an expert at extracting job titles from user messages."},
                 {"role": "user", "content": prompt}
@@ -58,7 +58,7 @@ def extract_title_with_llm(user_input: str):
             response_format={"type": "json_object"}
         )
         extracted_title = parse_response(response.choices[0].message.content.strip())
-        print(f"LLM extracted title response type: {type(extracted_title)}")
+        # print(f"LLM extracted title response type: {type(extracted_title)}")
         return extracted_title
     except Exception as e:
         print(f"Error extracting title with LLM: {e}")
@@ -77,6 +77,9 @@ def parse_response(response_text: str) -> Optional[List[Dict]]:
 
         # Parse JSON
         data = json.loads(response_text)
+
+        if data.get("status"):
+            return data
 
         # Extract projects
         projects = data.get("projects", [])

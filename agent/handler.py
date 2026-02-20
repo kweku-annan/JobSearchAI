@@ -64,8 +64,7 @@ def handle_job_search(message: str) -> str:
         print(f"LLM recommendation error: {e}")
 
     # Format and return the job response
-    # response = format_job_response(cached_jobs, recommendations, job_title)
-    response = job_title
+    response = format_job_response(cached_jobs, recommendations, job_title)
     return response
 
 
