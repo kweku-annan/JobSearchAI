@@ -3,71 +3,52 @@
 from utils.prompts import Prompts
 from pprint import pprint
 from openai import OpenAI
-from config import Config
+from config import settings
 import json
 from typing import Dict, List, Optional
 
 # OpenAI client will be initialized when needed
-_client = None
 
-def get_client():
-    """Get or initialize the OpenAI client"""
-    global _client
-    if _client is None:
-        _client = OpenAI(
-            api_key=Config.OPENAI_API_KEY,
-            base_url="https://openrouter.ai/api/v1"
-
-        )
-    return _client
-
-def generate_recommendations(job_data: Dict) -> Optional[List[Dict]]:
-    """Generate portfolio project recommendations based on job data using OpenAI LLM"""
+def generate_recommendations(
+        job_data: Optional[List[Dict]], llm_client: OpenAI, instructions: str, model: str = "openai/gpt-oss-120b"
+) -> Optional[List[Dict]]:
+    """
+    Generate portfolio recommendations for a job using LLM.
+    :param job_data: List of job data (dictionaries).
+    :param llm_client: The LLM client responsible for generating recommendations.
+    :param instructions: System instructions for the LLM.
+    :param model: llm model to use
+    :return: A list of jobs recommendations.
+    """
     try:
-        client = get_client()
-        prompt = Prompts.generate_recommendation_prompt(job_data)
-        response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
-            messages=[
-                {"role": "system", "content": "You are an expert career advisor helping job seekers create portfolio projects that align them as top candidates for job roles."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7,
-            response_format={"type": "json_object"}
+        message = [
+            {"role": "system", "content": instructions},
+            {"role": "user", "content": job_data},
+        ]
+
+        response = llm_client.responses.create(
+            model=model,
+            input=message,
+            text={
+                "format": {
+                    "type": "json_object"
+                }
+            }
         )
-        recommendations = parse_response(response.choices[0].message.content)
-        # pprint(recommendations)
-        return recommendations
+        recommendations = response.output_text
+        return json.loads(recommendations)
     except Exception as e:
-        print(f"Error generating recommendations: {e}")
-        return None
-
-
-def extract_title_with_llm(user_input: str):
-    """Use LLM to extract job title from user input"""
-    try:
-        client = get_client()
-        prompt = Prompts.extract_title_prompt(user_input)
-        response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
-            messages=[
-                {"role": "system", "content": "You are an expert at extracting job titles from user messages."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.0,
-            response_format={"type": "json_object"}
-        )
-        extracted_title = parse_response(response.choices[0].message.content.strip())
-        # print(f"LLM extracted title response type: {type(extracted_title)}")
-        return extracted_title
-    except Exception as e:
-        print(f"Error extracting title with LLM: {e}")
-        return None
-
+        return {
+            "success": False,
+            "error": {
+                "type": str(type(e).__name__),
+                "message": str(e)
+            }
+        }
 
 
 def parse_response(response_text: str) -> Optional[List[Dict]]:
-    """Parse OpenAI response to structure data"""
+    """Parse OpenAI response to structured data"""
     try:
         # Remove markdown code block if present
         response_text = response_text.strip()

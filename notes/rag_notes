@@ -1,0 +1,14 @@
+This notes is for the RAG (Retrieval-Augmented Generation) implementation in the JobSearchAI project.
+The purpose is optimize the retrieval process to use function calling to optimize the user search prompts instead of using
+regex and text process.
+
+1. **Optimizing The Function that sends job data to the LLM**:
+        a. The function generate_recommendations() used to accept a dictionary.
+            i. I am going to make it accept a list of dictionaries instead. This will allow the LLM to process multiple job data at once,
+               which is more efficient and can provide better recommendations.
+        b. The function calls the parse_response() function to parse the LLM's response, and returns a list of dictionaries.
+            i. I have modified it to return a python list of dictionaries instead, by using json.loads() to convert the JSON string into a Python list of dictionaries.
+            Remember to change your system prompt to instruct the LLM to return a list of dictionaries instead of a single dictionary.
+            ii. While checking, remember to also test if it is relevant to provide the output schema in the api call or just
+            leave it as `text = {"format": {"type": "json_object"}}`
+
