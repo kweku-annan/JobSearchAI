@@ -74,7 +74,7 @@ class DBStorage:
             (func.lower(CacheJobData.job_title).like(f'{normalized_title}%'), 3),
             # Contains search term
             (func.lower(CacheJobData.job_title).like(f'%{normalized_title}%'), 2),
-            # All words present in orderr (with words between)
+            # All words present in order (with words between)
             *self._build_word_order_conditions(search_terms, score=1),
             # Otherwise = 0 (won't match WHERE clause anyway)
             else_=0

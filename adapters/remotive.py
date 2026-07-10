@@ -1,14 +1,14 @@
 #!/bin/usr/env python
 """Adapter to fetch remote jobs from Remotive API"""
 import requests
-from config import Config
+from config import settings
 from utils.formatters import html_to_text
 
 
 def fetch_remotive_jobs():
     """Fetches job listings from the Remotive API"""
     try:
-        response = requests.get(Config.REMOTIVE_API_URL, timeout=10)
+        response = requests.get(settings.REMOTIVE_API_URL, timeout=10)
         response.raise_for_status()
         jobs_data = response.json()
         return jobs_data.get('jobs', [])

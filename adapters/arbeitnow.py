@@ -2,14 +2,14 @@
 """Adapter to fetch job listings from ArbeitNow API"""
 import requests
 
-from config import Config
+from config import settings
 from utils.formatters import html_to_text
 
 
 def fetch_arbeitnow_jobs():
     """Fetches job listings from the ArbeitNow API"""
     try:
-        response = requests.get(Config.ARBEITNOW_API_URL, timeout=10)
+        response = requests.get(settings.ARBEITNOW_API_URL, timeout=10)
         response.raise_for_status()
         jobs_data = response.json()
         return jobs_data.get('data', [])

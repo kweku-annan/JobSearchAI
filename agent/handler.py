@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 """Agent Handler"""
-from pprint import pprint
 from agent.llm_agent_service import generate_recommendations
-# In agent/handler.py
 from utils.intent_detector import extract_job_title
 from services.cache_logic import get_cached_jobs_by_title, caching_logic
 from utils.formatters import format_job_response, format_no_jobs_message
-from agent.llm_agent_service import extract_title_with_llm
+from utils.prompts import Prompts
+from config import settings
+
+from openai import OpenAI
 
 
 def process_message(user_message):
@@ -24,18 +25,10 @@ def handle_job_search(message: str) -> str:
 
     # Extract job title from user message
     job_title = extract_job_title(message)
-
-    # Extract using LLM if regex fails.
-    if not job_title or len(job_title.split()) > 3:  # If title is too long or not confidently extracted, try LLM
-        llm_response = extract_title_with_llm(message)
-        print(f"LLM response for title extraction: {llm_response}")
-        print(f"LLM response type: {type(llm_response)}")
-        if llm_response and isinstance(llm_response, dict) and llm_response.get("status") == "True":
-            job_title = llm_response.get("job_title")
-            print(f"LLM extracted job title: {job_title}")
-        else:
-            job_title = None
-
+    instruction = Prompts.GENERATION_INSTRUCTIONS
+    base_url = settings.OPEN_ROUTER_BASE_URL
+    api_key = settings.LLM_KEY
+    llm_client = OpenAI(api_key=api_key, base_url=base_url)
 
     print(f"Extracted job title from user message: {job_title}")
     if not job_title:
@@ -59,9 +52,11 @@ def handle_job_search(message: str) -> str:
     try:
         first_cached_job = cached_jobs[0].to_dict()
         # jobs_formatter_test = format_job_response(cached_jobs, recommendations, job_title)
-        recommendations = generate_recommendations(first_cached_job)
+        recommendations = generate_recommendations(first_cached_job, llm_client=llm_client, instructions=instruction, model="tencent/hy3:free")
     except Exception as e:
         print(f"LLM recommendation error: {e}")
+
+    print(f"Recommendations over here!: {recommendations}")
 
     # Format and return the job response
     response = format_job_response(cached_jobs, recommendations, job_title)

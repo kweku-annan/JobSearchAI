@@ -2,13 +2,13 @@
 """Adapter to fetch job listings from """
 
 import requests
-from config import Config
+from config import settings
 from utils.formatters import html_to_text
 
 def fetch_remoteok_jobs():
     """Fetches job listings from the RemoteOK API"""
     try:
-        response = requests.get(Config.REMOTEOK_API_URL, timeout=10)
+        response = requests.get(settings.REMOTEOK_API_URL, timeout=10)
         response.raise_for_status()
         jobs_data = response.json()
         return jobs_data[1:]  # The first element is metadata

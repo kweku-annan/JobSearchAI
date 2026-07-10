@@ -76,6 +76,7 @@ def jobsearchai():
             print(f"=== INCOMING REQUEST ===")
             print(f"METHOD: {request.method}")
             print(f"Has JSON: {request_data is not None}")
+            print(f"Here is the JSON data:\n{request_data}\n")
 
             # Extract message from Telex format
             user_message = extract_message_from_telex(request_data)

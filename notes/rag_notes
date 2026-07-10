@@ -3,12 +3,42 @@ The purpose is optimize the retrieval process to use function calling to optimiz
 regex and text process.
 
 1. **Optimizing The Function that sends job data to the LLM**:
-        a. The function generate_recommendations() used to accept a dictionary.
-            i. I am going to make it accept a list of dictionaries instead. This will allow the LLM to process multiple job data at once,
-               which is more efficient and can provide better recommendations.
-        b. The function calls the parse_response() function to parse the LLM's response, and returns a list of dictionaries.
+
+        a. The function calls the parse_response() function to parse the LLM's response, and returns a list of dictionaries.
             i. I have modified it to return a python list of dictionaries instead, by using json.loads() to convert the JSON string into a Python list of dictionaries.
             Remember to change your system prompt to instruct the LLM to return a list of dictionaries instead of a single dictionary.
             ii. While checking, remember to also test if it is relevant to provide the output schema in the api call or just
             leave it as `text = {"format": {"type": "json_object"}}`
+        b. TODO:  Your next work is in the formatters function. Check if the formatters conform to the new output of
+        recommendations. 
 
+2. **Optimizing job recommendation**
+        a. What I have realized is that the only one job description is sent to the LLM for recommendation.
+        This is not optimal because the LLM will only recommend projects based on one job description.
+        And if I send multiple job descriptions, the LLM will be able to recommend projects that are relevant to multiple job descriptions.
+           => This may bring a token max problem because we will be sending bunch of text.
+           => But if we don't care about the max token limit, we face a problem of reengineering our prompts and schema
+           to match the current demand from the LLM.
+                => The current demand will include:
+                    1. Telling the LLM to recommend relevant projects for each of the job descriptions and titles sent.
+                    2. Reengineer code to send two job titles with their descriptions to the LLM.
+                    3. Extract two job titles and descriptions from the database.
+           POSSIBLE SOLUTIONS:
+                1. Send multiple job descriptions and titles to the LLM in one prompt, and ask it to recommend relevant projects for each of them.
+                2. Send multiple job descriptions and titles to the LLM in one prompt, and ask it to recommend relevant projects for all of them combined.
+                3. Send multiple job descriptions and titles to the LLM in one prompt, and ask it to recommend relevant projects for each of them, but limit the number of recommendations per job description/title.
+                4. Use multiple openrouter api calls. Thus each call handles a job description and title, and then combine the results.
+
+
+3. **Query results and input job title mismatch**:
+        a. The current implementation allows for similar job title to be returned from the database, and the first on the
+        result is sent to the LLM for recommendation.
+        b.This is not optimal because the user may have searched for a job title that is not in the database,
+        and the LLM will recommend projects based on a different job title.
+        c. We need to implement a mechanism to ensure that the job title and role description sent to the LLM for
+        recommendation is the same as the one searched by the user or what the user prefers.
+        d. This way, we need to present all the job titles found and a bit of their descriptions to the user, and let
+        the user choose which one they want to use for recommendation.
+            TODO: Research how to implement this mechanism in the code.
+            This may involve modifying the database query to return all similar job titles and descriptions,
+            and then presenting them to the user for selection.

@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 """Adapter to fetch job listings from JobIcy"""
 import requests
-from config import Config
+from config import settings
 from utils.formatters import html_to_text
 
 
 def fetch_jobicy_jobs():
     """Fetches job listings from the JobIcy API"""
     try:
-        response = requests.get(Config.JOBICY_API_URL, timeout=10)
+        response = requests.get(settings.JOBICY_API_URL, timeout=10)
         response.raise_for_status()
         jobs_data = response.json()
         return jobs_data.get('jobs', [])

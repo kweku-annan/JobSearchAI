@@ -3,6 +3,7 @@
 from pprint import pprint
 from bs4 import BeautifulSoup
 from typing import Optional, List, Dict
+from textwrap import dedent
 
 
 def html_to_text(html_content):
@@ -10,7 +11,7 @@ def html_to_text(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup.get_text().strip()
 
-def format_job_response(jobs: List, recommendations: Optional[List[Dict]], job_title:str) -> str:
+def format_job_response(jobs: List, recommendations: Optional[List[Dict]], job_title: str) -> str:
     """
     Format jobs and recommendations into a nice message
 
@@ -37,23 +38,32 @@ def format_job_response(jobs: List, recommendations: Optional[List[Dict]], job_t
 
     # Start building the message
     # print("==================JOBS FOUND==================")
-    # pprint(jobs)
-    message = f"Here is a list of jobs for '{job_title.title()}':\n\n"
-    all_jobs_list = [jobs.to_dict() for jobs in jobs]
 
-    # Add all jobs to message
-    for i, job in enumerate(all_jobs_list, 1):
-        message += f"{i}. {job['job_title'].title()} @ {job['company_name']} - {job['location']} - "
-        if job.get('job_url'):
-            message += f"[Apply Here]({job['job_url']})\n"
-        else:
-            message += "\n"
+    message = f"Here is a list of jobs for '{job_title.title()}':\n"
 
-        # Add description (truncate if too long)
-        desc = job.get('job_description', 'No description available')
-        if len(desc) > 150:
-            desc = desc[:150] + "..."
-        message += f"   Description: {desc}\n\n"
+    all_jobs_list = [job.to_dict() for job in jobs]
+
+    for index, job in enumerate(all_jobs_list, start=1):
+        job_id = index
+        description = job.get('job_description', 'No description provided')
+        title = job.get('job_title', 'No title provided')
+        location = job.get('location', 'No location provided')
+        is_remote = job.get('is_remote', False)
+        url = job.get('job_url', 'No url provided')
+        company_name = job.get('company_name', 'No company name provided')
+        date_posted = job.get('date_posted', 'No date_posted provided')
+
+        job_info = dedent(f"""
+            {job_id}. {title} @ {company_name}\n
+            Location: {location}\n
+            Remote: {is_remote}\n
+            Date Posted: {date_posted}\n
+            Description: {description}\n
+            Apply Here: {url}\n
+        """)
+
+        message +=  job_info
+
 
     # Add recommendations if available
     if recommendations:
